@@ -1,0 +1,144 @@
+#!/usr/bin/perl -w 
+#
+#
+# $Id: runeclipse 422 2013-06-11 07:31:16Z pasl $
+#
+
+use strict ;
+
+use Getopt::Std ;
+use Cwd ;
+
+use IO::File;
+
+# ------------------------------------------------------
+
+my $utdir = "/private/miliu/bin" ;
+
+# -----------------------------------------------------
+
+my $arch64 = "x86_64Linux" ;      # bsub resource string for 64bit
+
+# ---------------------------------------------------
+
+my $head_name = "work.head" ;
+my $data_name = "work.data"
+my $version = "931" ;
+my $progname = "UTCHEM" ;
+
+
+# ------------------------------------------------------
+
+
+sub build_batch ;
+sub in_error ;
+
+my $workdir = cwd ;
+my $scriptname = "runutchem" ;
+my $usage = "usage $scriptname  [-d head_name] [-i data_name] [-v version] [-l] root" ;
+
+# Get command line options:
+
+my %options = () ;
+
+getopts("d:i:v:l",\%options) ;
+
+if ($options{h}) {
+    print "$usage\n\n" ;
+    print "   head_name is a input head_name, default value: $head_name\n" ;
+    print "   data_name is a input data_name, default value: $data_name\n" ;
+    print "   version  is a valid UTCHEM version, default: $version\n" ;
+    print "   -l       Selects interactive execution\n" ;
+    exit ;
+} ;
+
+if ($options{d}) { $head_name = $options{d} ; } ;
+if ($options{i}) { $data_name = $options{i} ; } ;
+if ($options{v}) { $version = $options{v} ; } ;
+if ($options{l}) { $interactive = 1 } ;
+
+# Extract datafile name (and possibly working directory)
+#  from command line argument:
+
+my $rootname ;
+
+my $numargs = @ARGV ;
+if ($numargs == 0) {
+    in_error("Missing root name,\n$usage\nFor help:$scriptname -h") ;
+} else {
+    my ($argname) = @ARGV ; 
+    $argname =~ s/\.DATA$// ;
+    if ($argname =~ /^(\/\S+\/)(\S+)$/) {
+        $workdir  = $1 ;
+        $rootname = $2 ;
+    } elsif ($argname =~ /^(\S+\/)(\S+)$/) {
+        $workdir  = $workdir . "/" . $1 ;
+        $rootname = $2 ;
+    } else { 
+        $rootname = $argname ;
+    } ;
+} ;
+
+if (! -f "$workdir/$rootname\.DATA") {
+    in_error("Datafile $workdir/$rootname\.DATA does not exist") ;
+} ; 
+
+my $exe64 ;
+
+$exe64 = "$utdir/$progname$version.exe" ;
+
+if ( ! -f $exe64 ) {
+   in_error("Executable $version does not exist") ;
+} ;
+
+#
+# Build batchfile:
+#
+
+my $batchfilename = "$workdir/$rootname" . ".job" ;
+
+build_batch ;
+
+
+sub build_batch
+{
+    open (BATCHFIL,">$batchfilename") or 
+        die "$scriptname: Cannot create batch file $batchfilename\n" ;
+
+    print BATCHFIL 
+        "#!/bin/sh \n" ;
+    print BATCHFIL 
+        "cd $workdir\n" ; 
+    print BATCHFIL 
+        "/bin/rm -f HEAD\n" ; 
+    print BATCHFIL 
+        "/bin/rm -f INPUT\n" ; 
+    print BATCHFIL 
+		"ln -s $workdiri/$rootname.head HEAD\n"
+    print BATCHFIL 
+		"ln -s $workdiri/$rootname.input INPUT\n"
+    print BATCHFIL 
+        "time $exe64\n" ;
+    } else {
+        print BATCHFIL 
+            "> $rootname.LOG 2> $rootname.ERR\n" ;
+    } ;
+    print BATCHFIL "mv -f $batchfilename ${batchfilename}.done\n" ;
+
+    close(BATCHFIL) ;
+    chmod(0770,$batchfilename) ;
+} ;
+
+
+sub in_error 
+{
+    my ($message) = @_ ;
+
+    if ($interactive) {
+        print "ERROR $scriptname: $message\n" ;
+    } else {
+        print "-1\n" ;
+    } ; 
+    exit ;    
+} ;
+
