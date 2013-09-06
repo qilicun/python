@@ -18,3 +18,7 @@ if __name__ == '__main__':
 	is_it_true(['a', 'c'])
 	is_it_true([False])
 
+	is_it_true(())
+	is_it_true(('a', 'b'))
+	is_it_true((False))
+
