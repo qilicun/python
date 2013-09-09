@@ -25,4 +25,8 @@ class Fib:
 if __name__ == '__main__':
 	
 	fib = Fib(int(input('Please input a number: ')))
-	fib.__doc__ 
+	print(fib.__doc__)
+	fib.max
+	fib.__class__
+	for n in fib:
+		print(n, ' ')
