@@ -3,10 +3,9 @@ class Fib:
 	'''create fibonacci number iterator
 	'''
 	def __init__(self, max):
-		self.max = max
-	
-	def __iter__(self):
+            self.max = max
 
+	def __iter__(self):
 		self.a = 0
 		self.b = 1
 		return self

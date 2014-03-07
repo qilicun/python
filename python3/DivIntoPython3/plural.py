@@ -1,4 +1,4 @@
-#!/usr/bin/python3.3
+#!/usr/bin/env python3
 '''test cases for re module
    use the search and sub methods
    '''
