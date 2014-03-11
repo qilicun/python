@@ -9,6 +9,9 @@ def fib(n):
 #        print(a, end=' ')
         a, b = b, a+b
     return result
-print(fib.__doc__)
-fib = fib(100)
-print(fib)
+
+if __name__ == "__main__":
+    import sys
+    print(fib(int(sys.argv[1])))
+#print(fib.__doc__)
+#fib = fib(100)
