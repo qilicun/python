@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import numpy as np
 from scipy.optimize import leastsq
 import pylab as pl
@@ -17,7 +16,7 @@ y1 = np.array([3, 5, 7, 9, 11, 13], dtype=float)
 p0 = [1, 1]
 r = leastsq(residuals, p0, args=(x1, y1))
 
-print r[0]
+print(r[0])
 
 pl.figure(1)
 pl.plot(x1, y1, label="true data")
