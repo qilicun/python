@@ -11,11 +11,15 @@ class Gravity:
         return G*m*M/r**2
 
     def visualize(self, r_start, r_stop, n=100):
-        from scitools.std import plot, linspace
-        r = linspace(r_start, r_stop, n)
+#        from scitools.std import plot, linspace
+        import matplotlib.pyplot as plt
+        import numpy as np
+        r = np.linspace(r_start, r_stop, n)
         g = self.force(r)
         title='Gravity force: m=%g, M=%g' % (self.m, self.M)
-        plot(r, g, title=title)
+        plt.plot(r, g)
+        plt.title(title)
+        plt.show()
 
 # SI units m and kg:
 mass = {'sun': 1.99E+30, 'earth': 5.97E+24,
@@ -31,5 +35,6 @@ if __name__ == '__main__':
     r = distance[(object[0], object[1])]
     Fg = gravity.force(r)
     print 'force between %s and %s: %E N' % (object[0], object[1], Fg)
-    gravity.plot(r - 0.2*r, r + 0.2*r)
+#    gravity.plot(r - 0.2*r, r + 0.2*r)
+    gravity.visualize(r - 0.2*r, r + 0.2*r)
 
