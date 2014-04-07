@@ -1,8 +1,8 @@
-C = -20;  F = 9.0/5*C + 32;  print C, F
-C = -15;  F = 9.0/5*C + 32;  print C, F
-C = -10;  F = 9.0/5*C + 32;  print C, F
-C =  -5;  F = 9.0/5*C + 32;  print C, F
-C =   0;  F = 9.0/5*C + 32;  print C, F
+C = -20;  F = 9.0/5*C + 32;  print (C, F)
+C = -15;  F = 9.0/5*C + 32;  print (C, F)
+C = -10;  F = 9.0/5*C + 32;  print (C, F)
+C =  -5;  F = 9.0/5*C + 32;  print (C, F)
+C =   0;  F = 9.0/5*C + 32;  print (C, F)
 C =   5;  F = 9.0/5*C + 32;  print C, F
 C =  10;  F = 9.0/5*C + 32;  print C, F
 C =  15;  F = 9.0/5*C + 32;  print C, F
