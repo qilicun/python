@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 import re
 import numpy as np
+import argparse
 
+#parser = argparse.ArgumentParser(description="Read special keyword")
+#parser.add_argument('-f', '--filen', help="Name of file", default=None, required=True)
+#parser.add_argument('')
 def read_to_dict(filen):
     dm = {}
     string = ""
@@ -11,7 +15,8 @@ def read_to_dict(filen):
             line = line.strip()
             if not len(line):
                 continue
-            print line
+            if re.match("^-", line):
+                continue
             pattern = '[A-Z]'
             if re.match(pattern, line):
                 string = line
