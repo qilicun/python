@@ -12,14 +12,14 @@ from bisection import bisection_evolution
 import sys, time
 usage = '%s f-formula a b [epsilon]' % sys.argv[0]
 try:
-    f_formula = sys.argv[1]
-    a = float(sys.argv[2])
-    b = float(sys.argv[3])
+#    f_formula = sys.argv[1]
+    a = float(sys.argv[1])
+    b = float(sys.argv[2])
 except IndexError:
     print usage; sys.exit(1)
 
 try:  # is epsilon given on the command-line?
-    epsilon = float(sys.argv[4])
+    epsilon = float(sys.argv[3])
 except IndexError:
     epsilon = 1E-6  # default value
 
@@ -27,10 +27,12 @@ except IndexError:
 import glob, os
 for filename in glob.glob('tmp_*.eps'): os.remove(filename)
 
-from scitools.StringFunction import StringFunction
-from scitools.std import *  # might be needed for f_formula
-f = StringFunction(f_formula)
-f.vectorize(globals())
+#from scitools.StringFunction import StringFunction
+#from scitools.std import *  # might be needed for f_formula
+#f = StringFunction(f_formula)
+#f.vectorize(globals())
+def f(x):
+    return x**2 -4
 
 results = bisection_evolution(f, a, b, epsilon)
 if results is None:
@@ -38,13 +40,15 @@ if results is None:
     sys.exit(1)
 
 # Visualize
-x = linspace(a, b, 501)
+import numpy as np
+import pylab as pl
+x = np.linspace(a, b, 501)
 y = f(x)
 ymin = min(y);  ymax = max(y)
 itcount = 1
 for interval, m in results:
     a, b = interval
-    plot(x, y, 'r-',
+    pl.plot(x, y, 'r-',
          [a, a], [ymin, ymax], 'g-',
          [b, b], [ymin, ymax], 'g-',
          [m, m], [ymin, ymax], 'b-',
